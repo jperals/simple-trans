@@ -2,14 +2,14 @@
   <table>
     <tr>
       <th>
-        Id
+        id
       </th>
       <th v-for="(translation, languageId) in json.translations">
         {{ languageId }}
       </th>
     </tr>
     <tr v-for="key in json.msgids">
-      <td>
+      <td class="not-editable">
         {{ key }}
       </td>
       <td v-for="translation in json.translations" contenteditable="true">
@@ -67,7 +67,17 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  table {
+    border-collapse: collapse;
+  }
   th {
     text-align: left;
+  }
+  td {
+    border: 1px solid #eee;
+    padding: 6px;
+  }
+  td.not-editable {
+    color: #888;
   }
 </style>
