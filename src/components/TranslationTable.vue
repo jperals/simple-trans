@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table v-if="json">
     <tr>
       <th>
         id
@@ -8,12 +8,18 @@
         {{ languageId }}
       </th>
     </tr>
-    <tr v-for="key in json.msgids">
+    <tr v-for="msgid in json.msgids">
       <td class="not-editable">
-        {{ key }}
+        <div v-html="msgid"></div>
       </td>
-      <td v-for="translation in json.translations" contenteditable="true">
-        {{ translation[key] }}
+      <td v-for="(translation, language) in json.translations"
+          contenteditable="true"
+          @keyup="saveTranslation(language, msgid, $event)"
+          @blur="saveTranslation(language, msgid, $event)"
+          @paste="saveTranslation(language, msgid, $event)"
+          @delete="saveTranslation(language, msgid, $event)"
+          @focus="saveTranslation(language, msgid, $event)">
+          <div v-html="translation[msgid]"></div>
       </td>
     </tr>
   </table>
@@ -48,7 +54,6 @@
         })
         Promise.all(promises)
           .then(function (results) {
-            console.log(results)
             var translations = {}
             var msgids = Object.keys(results[0])
             languages.forEach(function (languageId, i) {
@@ -58,8 +63,15 @@
               'msgids': msgids,
               'translations': translations
             }
-            console.log(this.json)
           }.bind(this))
+      },
+      saveTranslation (language, msgid, event) {
+        if (event) {
+          event.preventDefault()
+          console.log(language)
+          console.log(msgid)
+          console.log(event.target.children[0].innerHTML)
+        }
       }
     }
   }
@@ -70,14 +82,23 @@
   table {
     border-collapse: collapse;
   }
+
   th {
     text-align: left;
   }
+
   td {
     border: 1px solid #eee;
-    padding: 6px;
+    vertical-align: top;
+    min-width: 200px;
   }
+
   td.not-editable {
     color: #888;
   }
+
+  td > div {
+    padding: 12px;
+  }
+
 </style>
