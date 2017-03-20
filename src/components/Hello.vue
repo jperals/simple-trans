@@ -4,16 +4,16 @@
       <th>
         Id
       </th>
-      <th>
-        en
+      <th v-for="(translation, languageId) in json.translations">
+        {{ languageId }}
       </th>
     </tr>
-    <tr v-for="(translated, original) in json">
+    <tr v-for="key in json.msgids">
       <td>
-        {{ original }}
+        {{ key }}
       </td>
-      <td contenteditable="true">
-        {{ translated }}
+      <td v-for="translation in json.translations" contenteditable="true">
+        {{ translation[key] }}
       </td>
     </tr>
   </table>
@@ -29,16 +29,36 @@
     },
     methods: {
       getJson () {
+        const languages = ['en', 'zh', 'de']
         var opts = {
           headers: new Headers(),
           method: 'GET'
         }
-        fetch('static/l10n/en.json', opts)
-          .then(function (response) {
-            return response.text()
-          })
-          .then(function (data) {
-            this.json = JSON.parse(data)
+        var promises = []
+        languages.forEach(function (id) {
+          promises.push(new Promise(function (resolve, reject) {
+            fetch('static/l10n/' + id + '.json', opts)
+              .then(function (response) {
+                return response.text()
+              })
+              .then(function (data) {
+                resolve(JSON.parse(data))
+              })
+          }))
+        })
+        Promise.all(promises)
+          .then(function (results) {
+            console.log(results)
+            var translations = {}
+            var msgids = Object.keys(results[0])
+            languages.forEach(function (languageId, i) {
+              translations[languageId] = results[i]
+            })
+            this.json = {
+              'msgids': msgids,
+              'translations': translations
+            }
+            console.log(this.json)
           }.bind(this))
       }
     }
@@ -47,21 +67,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h1, h2 {
-    font-weight: normal;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-
-  a {
-    color: #42b983;
+  th {
+    text-align: left;
   }
 </style>
