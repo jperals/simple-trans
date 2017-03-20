@@ -1,5 +1,22 @@
 <template>
-    <div>data: {{ json }}</div>
+  <table>
+    <tr>
+      <th>
+        Id
+      </th>
+      <th>
+        en
+      </th>
+    </tr>
+    <tr v-for="(translated, original) in json">
+      <td>
+        {{ original }}
+      </td>
+      <td contenteditable="true">
+        {{ translated }}
+      </td>
+    </tr>
+  </table>
 </template>
 
 <script>
@@ -21,7 +38,7 @@
             return response.text()
           })
           .then(function (data) {
-            this.json = data
+            this.json = JSON.parse(data)
           }.bind(this))
       }
     }
