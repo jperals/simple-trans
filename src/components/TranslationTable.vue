@@ -2,24 +2,25 @@
   <table v-if="json">
     <tr>
       <th>
-        id
+        source
       </th>
       <th v-for="(translation, languageId) in json.translations">
         {{ languageId }}
       </th>
     </tr>
-    <tr v-for="msgid in json.msgids">
-      <td class="not-editable">
-        <div v-html="msgid"></div>
+    <tr v-for="(msgid, index) in json.msgids" v-bind:id="getRowId(index)">
+      <td class="not-editable msgid">
+        <textarea disabled="true">{{ msgid }}</textarea>
       </td>
-      <td v-for="(translation, language) in json.translations"
-          contenteditable="true"
-          @keyup="saveTranslation(language, msgid, $event)"
-          @blur="saveTranslation(language, msgid, $event)"
-          @paste="saveTranslation(language, msgid, $event)"
-          @delete="saveTranslation(language, msgid, $event)"
-          @focus="saveTranslation(language, msgid, $event)">
-          <div v-html="translation[msgid]"></div>
+      <td v-for="(translation, language) in json.translations">
+          <textarea v-model="translation[msgid]"
+                    @keyup="saveTranslation(language, msgid, $event)"
+                    @blur="saveTranslation(language, msgid, $event)"
+                    @paste="saveTranslation(language, msgid, $event)"
+                    @delete="saveTranslation(language, msgid, $event)"
+                    @focus="saveTranslation(language, msgid, $event)"
+                    :placeholder="msgid">
+          </textarea>
       </td>
     </tr>
   </table>
@@ -68,10 +69,13 @@
       saveTranslation (language, msgid, event) {
         if (event) {
           event.preventDefault()
-          console.log(language)
           console.log(msgid)
-          console.log(event.target.children[0].innerHTML)
+          console.log(language)
+          console.log(event.target.value)
         }
+      },
+      getRowId (index) {
+        return 'msgid-' + index
       }
     }
   }
@@ -93,12 +97,31 @@
     min-width: 200px;
   }
 
+  td:focus {
+    border-color: black;
+  }
+
   td.not-editable {
     color: #888;
   }
 
-  td > div {
+  th,
+  td > div,
+  td > textarea {
     padding: 12px;
+  }
+
+  .msgid {
+    color: black;
+  }
+
+  textarea {
+    border: 0 none;
+    resize: none;
+    width: calc(100% - 2*12px);
+    min-height: 80px;
+    display: block;
+    outline: none;
   }
 
 </style>
