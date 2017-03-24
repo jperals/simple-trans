@@ -10,29 +10,31 @@
     </tr>
     <tr v-for="(msgid, index) in json.msgids" v-bind:id="getRowId(index)">
       <td class="not-editable msgid">
-        <textarea disabled="true">{{ msgid }}</textarea>
+        <translation-cell :msg-id="msgid">
+        </translation-cell>
       </td>
       <td v-for="(translation, language) in json.translations">
-          <textarea v-model="translation[msgid]"
-                    @keyup="saveTranslation(language, msgid, $event)"
-                    @blur="saveTranslation(language, msgid, $event)"
-                    @paste="saveTranslation(language, msgid, $event)"
-                    @delete="saveTranslation(language, msgid, $event)"
-                    @focus="saveTranslation(language, msgid, $event)"
-                    :placeholder="msgid">
-          </textarea>
+        <translation-cell :msg-id="msgid"
+                          :language-id="language"
+                          :translation-data="translation">
+        </translation-cell>
       </td>
     </tr>
   </table>
 </template>
 
 <script>
+  import TranslationCell from './TranslationCell.vue'
   export default {
     name: 'hello',
     data () {
       return {
-        json: this.getJson()
+        json: this.getJson(),
+        unresolved: 0
       }
+    },
+    components: {
+      'translation-cell': TranslationCell
     },
     methods: {
       getJson () {
@@ -66,35 +68,6 @@
             }
           }.bind(this))
       },
-      saveTranslation (language, msgid, event) {
-        if (event) {
-          event.preventDefault()
-          console.log(msgid)
-          console.log(language)
-          console.log(event.target.value)
-          var headers = new Headers()
-          headers.append('Content-Type', 'application/json')
-          const url = 'http://localhost:3000/translate'
-          const opts = {
-            headers: headers,
-            method: 'PUT',
-            body: JSON.stringify({
-              language: language,
-              msgid: msgid,
-              translation: event.target.value
-            })
-          }
-          fetch(
-            url,
-            opts)
-            .then(function (response) {
-              return response.text() // Wait for ReadableStream to finish
-            })
-            .then(function (response) {
-              console.log(response)
-            })
-        }
-      },
       getRowId (index) {
         return 'msgid-' + index
       }
@@ -127,22 +100,12 @@
   }
 
   th,
-  td > div,
   td > textarea {
     padding: 12px;
   }
 
   .msgid {
     color: black;
-  }
-
-  textarea {
-    border: 0 none;
-    resize: none;
-    width: calc(100% - 2*12px);
-    min-height: 80px;
-    display: block;
-    outline: none;
   }
 
 </style>
