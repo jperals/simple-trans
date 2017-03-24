@@ -72,6 +72,27 @@
           console.log(msgid)
           console.log(language)
           console.log(event.target.value)
+          var headers = new Headers()
+          headers.append('Content-Type', 'application/json')
+          const url = 'http://localhost:3000/translate'
+          const opts = {
+            headers: headers,
+            method: 'PUT',
+            body: JSON.stringify({
+              language: language,
+              msgid: msgid,
+              translation: event.target.value
+            })
+          }
+          fetch(
+            url,
+            opts)
+            .then(function (response) {
+              return response.text() // Wait for ReadableStream to finish
+            })
+            .then(function (response) {
+              console.log(response)
+            })
         }
       },
       getRowId (index) {
