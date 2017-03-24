@@ -28,7 +28,7 @@ app.put('/translate', function(req, res) {
   const languageId = req.body.language
   const msgid = req.body.msgid
   const translation = req.body.translation
-  filePath = [l10nPath, languageId + '.json'].join('/')
+  const filePath = [l10nPath, languageId + '.json'].join('/')
   jsonfile.readFile(filePath, function(err, obj) {
     if(err) {
       console.error(err)
