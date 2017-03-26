@@ -9,16 +9,14 @@
       </th>
     </tr>
     <tr v-for="(msgid, index) in json.msgids" v-bind:id="getRowId(index)">
-      <td class="not-editable msgid">
-        <translation-cell :msg-id="msgid">
-        </translation-cell>
-      </td>
-      <td v-for="(translation, language) in json.translations">
-        <translation-cell :msg-id="msgid"
-                          :language-id="language"
-                          :translation-data="translation">
-        </translation-cell>
-      </td>
+      <translation-cell :msg-id="msgid">
+      </translation-cell>
+      <translation-cell v-for="(translation, languageId) in json.translations"
+                        :key="languageId"
+                        :msg-id="msgid"
+                        :language-id="languageId"
+                        :translation-data="translation">
+      </translation-cell>
     </tr>
   </table>
 </template>
