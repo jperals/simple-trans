@@ -97,8 +97,7 @@
     color: #888;
   }
 
-  th,
-  td > textarea {
+  th {
     padding: 12px;
   }
 

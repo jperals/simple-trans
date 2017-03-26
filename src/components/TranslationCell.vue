@@ -3,12 +3,13 @@
     <textarea class="translation"
               v-if="languageId"
               v-model="translationData[msgId]"
-              @keyup="saveTranslation(languageId, msgId, $event)"
-              @paste="saveTranslation(languageId, msgId, $event)"
-              @delete="saveTranslation(languageId, msgId, $event)"
+              @keyup="change(languageId, msgId, $event)"
+              @paste="change(languageId, msgId, $event)"
+              @delete="change(languageId, msgId, $event)"
               :placeholder="msgId">
     </textarea>
-    <textarea class="msgid"
+    <textarea disabled
+              class="msgid"
               v-else
               v-model="msgId">
     </textarea>
@@ -26,9 +27,9 @@
     border: 0 none;
     resize: none;
     width: calc(100% - 2 * 12px);
-    min-height: 80px;
     display: block;
     outline: none;
+    padding: 12px;
   }
   .status {
     position: absolute;
@@ -85,9 +86,17 @@
         unresolved: 0
       }
     },
+    mounted: function () {
+      this.autosize()
+    },
     methods: {
+      change (language, msgid, event) {
+        this.autosize()
+        this.saveTranslation(language, msgid, event)
+      },
       saveTranslation (language, msgid, event) {
         if (event) {
+          this.autosize()
           event.preventDefault()
           this.saved = false
           this.unresolved += 1
@@ -114,6 +123,11 @@
               this.saved = this.unresolved < 1
             }.bind(this))
         }
+      },
+      autosize () {
+        var textarea = this.$el.querySelector('textarea')
+        var height = textarea.scrollHeight - 24 + 'px'
+        textarea.style.height = height
       }
     }
   }
