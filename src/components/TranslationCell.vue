@@ -60,6 +60,7 @@
     right: 0;
     padding: 6px;
     font-size: 14px;
+    pointer-events: none;
   }
   .status .saving {
     color: rgba(127, 127, 127, .25);
