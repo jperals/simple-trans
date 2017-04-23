@@ -1,5 +1,6 @@
 <template>
-  <td v-bind:class="{ 'non-editable': !languageId, 'msgid': !languageId }">
+  <td ref="table-cell"
+      v-bind:class="{ 'non-editable': !languageId, 'msgid': !languageId }">
     <textarea class="translation"
               v-if="languageId"
               v-model="translationData[msgId]"
@@ -162,9 +163,10 @@
         }
       },
       autosize () {
-        var textarea = this.$el.querySelector('textarea')
-        var height = textarea.scrollHeight - 24 + 'px'
-        textarea.style.height = height
+        let textarea = this.$el.querySelector('textarea')
+        let tableCell = this.$refs['table-cell']
+        let maxHeight = Math.max(textarea.scrollHeight - 26, tableCell.clientHeight - 26)
+        textarea.style.height = maxHeight + 'px'
       }
     }
   }
