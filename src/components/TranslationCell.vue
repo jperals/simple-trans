@@ -46,7 +46,6 @@
   }
   textarea:focus {
     border-color: rgba(63, 207, 63, .75);
-    width: calc(100% - 2 * 12px - 1px);
   }
   .status {
     position: absolute;
