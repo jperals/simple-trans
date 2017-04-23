@@ -16,7 +16,6 @@
     </textarea>
     <div class="status">
       <span v-if="unresolved" class="saving">
-        <span class="message">Saving…</span>
         <icon name="circle-o-notch" class="icon spinner"></icon>
       </span>
       <span v-if="saved" class="saved">
@@ -35,24 +34,31 @@
     position: relative;
     padding: 0;
   }
+  .msgid {
+    color: black;
+  }
   textarea {
-    border: 1px solid transparent;
+    border: 0 none;
     background: transparent;
     resize: none;
     width: calc(100% - 2 * 12px);
     display: block;
     outline: none;
-    padding: 12px;
-    /*margin-left: -1px;*/
+    padding: 12px 12px 20px;
   }
   textarea:focus {
-    border-color: rgba(63, 207, 63, .75);
+    background-color: rgb(250, 255, 250);
+    outline: 1px solid rgba(63, 207, 63, .75);
+    outline-offset: 0;
+  }
+  textarea::placeholder {
+    color: rgba(0, 0, 0, .25);
   }
   .status {
     position: absolute;
     bottom: 0;
     right: 0;
-    padding: 0 6px;
+    padding: 6px;
     font-size: 14px;
   }
   .status .saving {
@@ -76,6 +82,7 @@
     vertical-align: middle;
     height: 14px;
     width: 14px;
+    margin-left: 4px;
   }
   .spinner {
     animation-name: infinite-spinning;
@@ -165,8 +172,8 @@
       autosize () {
         let textarea = this.$el.querySelector('textarea')
         let tableCell = this.$refs['table-cell']
-        let maxHeight = Math.max(textarea.scrollHeight - 26, tableCell.clientHeight - 26)
-        textarea.style.height = maxHeight + 'px'
+        let maxHeight = Math.max(textarea.scrollHeight, tableCell.clientHeight)
+        textarea.style.height = maxHeight - 32 + 'px' // Substract paddingTop + paddingBottom
       }
     }
   }

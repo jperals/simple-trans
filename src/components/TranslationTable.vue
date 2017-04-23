@@ -1,23 +1,27 @@
 <template>
   <table v-if="json">
-    <tr>
-      <th>
-        source
-      </th>
-      <th v-for="(translation, languageId) in json.translations">
-        {{ languageId }}
-      </th>
-    </tr>
-    <tr v-for="(msgid, index) in json.msgids" v-bind:id="getRowId(index)">
-      <translation-cell :msg-id="msgid">
-      </translation-cell>
-      <translation-cell v-for="(translation, languageId) in json.translations"
-                        :key="languageId"
-                        :msg-id="msgid"
-                        :language-id="languageId"
-                        :translation-data="translation">
-      </translation-cell>
-    </tr>
+    <thead>
+      <tr>
+        <th>
+          source
+        </th>
+        <th v-for="(translation, languageId) in json.translations">
+          {{ languageId }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(msgid, index) in json.msgids" v-bind:id="getRowId(index)">
+        <translation-cell :msg-id="msgid">
+        </translation-cell>
+        <translation-cell v-for="(translation, languageId) in json.translations"
+                          :key="languageId"
+                          :msg-id="msgid"
+                          :language-id="languageId"
+                          :translation-data="translation">
+        </translation-cell>
+      </tr>
+    </tbody>
   </table>
 </template>
 
@@ -83,14 +87,21 @@
     text-align: left;
   }
 
+  tbody tr:hover {
+    background-color: rgb(250, 250, 250);
+    border-color: #ddd;
+  }
+
+  tbody tr:hover td.non-editable {
+    background-color: rgb(240, 250, 250);
+    position: relative;
+    border-left: 2px solid rgba(63, 207, 63, .75);
+  }
+
   td {
     border: 1px solid #eee;
     vertical-align: top;
     min-width: 200px;
-  }
-
-  td:focus {
-    border-color: black;
   }
 
   td.not-editable {
@@ -99,10 +110,6 @@
 
   th {
     padding: 12px;
-  }
-
-  .msgid {
-    color: black;
   }
 
 </style>
