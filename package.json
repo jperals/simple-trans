@@ -1,9 +1,9 @@
 {
-  "name": "i18n-tables",
-  "version": "1.0.0",
-  "description": "Web platform to ease translation",
-  "author": "Joan Perals <joan.perals@ixds.com>",
-  "private": true,
+  "name": "simple-trans",
+  "version": "0.1.0",
+  "description": "Simple, JSON-based web platform to ease translation of software projects",
+  "author": "Joan Perals",
+  "private": false,
   "scripts": {
     "dev": "node index.js & node build/dev-server.js",
     "build": "node build/build.js",

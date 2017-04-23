@@ -1,6 +1,6 @@
-# i18n-tables
+# simple-trans
 
-> Web platform to ease translation
+> Simple, JSON-based web platform to ease translation of software projects
 
 ## Build Setup
 
