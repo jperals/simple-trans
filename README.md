@@ -2,6 +2,15 @@
 
 > Simple, JSON-based web platform to ease translation of software projects
 
+![Screenshot](static/simple-trans-screenshot.png)
+
+## Why?
+
+- While there is a number of localisation platforms available, some companies prefer to not host their project content on third party servers if possible.
+- For a development process where quick iteration is important, an online approach as a single and unidirectional "source of truth" is much preferable to a file-based workflow.
+- All language translations are visible at a glance, which can be helpful for translators and can facilitate coherence across languages.
+- Simplicity.
+
 ## Build Setup
 
 ``` bash
