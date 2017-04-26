@@ -92,6 +92,18 @@
     border-collapse: collapse;
   }
 
+  thead {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+  }
+
+  th,
+  td {
+    padding: 12px;
+  }
+
   th {
     text-align: left;
   }
@@ -107,13 +119,12 @@
     border-left: 2px solid rgba(63, 207, 63, .75);
   }
 
-  td {
+  th, td {
     border: 1px solid #eee;
     vertical-align: top;
-    min-width: 200px;
   }
 
-  td.not-editable {
+  .msgid {
     color: #888;
   }
 
