@@ -106,12 +106,17 @@
         unresolved: 0
       }
     },
+    mounted: function () {
+      this.autosize()
+    },
     methods: {
       change (language, msgid, event) {
+        this.autosize()
         this.saveTranslation(language, msgid, event)
       },
       saveTranslation (language, msgid, event) {
         if (event) {
+          this.autosize()
           event.preventDefault()
           this.saved = false
           this.unresolved += 1
@@ -142,6 +147,12 @@
               this.error = error
             }.bind(this))
         }
+      },
+      autosize () {
+        let textarea = this.$el.querySelector('textarea')
+        let tableCell = this.$refs['table-cell']
+        let maxHeight = Math.max(textarea.scrollHeight, tableCell.clientHeight)
+        textarea.style.height = maxHeight - 32 + 'px' // Substract paddingTop + paddingBottom
       }
     }
   }
