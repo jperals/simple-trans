@@ -1,6 +1,5 @@
 <template>
-  <td ref="table-cell"
-      v-bind:class="{ 'non-editable': !languageId, 'msgid': !languageId }">
+  <td ref="table-cell">
     <textarea class="translation"
               v-if="languageId"
               v-model="translationData[msgId]"
@@ -8,11 +7,6 @@
               @paste="change(languageId, msgId, $event)"
               @delete="change(languageId, msgId, $event)"
               :placeholder="msgId">
-    </textarea>
-    <textarea disabled
-              class="msgid"
-              v-else
-              v-model="msgId">
     </textarea>
     <div class="status">
       <span v-if="unresolved" class="saving">
@@ -30,22 +24,6 @@
   </td>
 </template>
 <style scoped>
-  td {
-    position: relative;
-    padding: 0;
-  }
-  .msgid {
-    color: black;
-  }
-  textarea {
-    border: 0 none;
-    background: transparent;
-    resize: none;
-    width: calc(100% - 2 * 12px);
-    display: block;
-    outline: none;
-    padding: 12px 12px 20px;
-  }
   textarea:focus {
     background-color: rgb(250, 255, 250);
     outline: 1px solid rgba(63, 207, 63, .75);

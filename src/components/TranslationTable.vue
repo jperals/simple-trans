@@ -12,8 +12,10 @@
     </thead>
     <tbody>
       <tr v-for="(msgid, index) in json.msgids" v-bind:id="getRowId(index)">
-        <translation-cell :msg-id="msgid">
-        </translation-cell>
+        <td class="msgid">
+          <textarea disabled
+                    class="non-editable">{{ msgid }}</textarea>
+        </td>
         <translation-cell v-for="(translation, languageId) in json.translations"
                           :key="languageId"
                           :msg-id="msgid"
@@ -87,7 +89,7 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
   table {
     border-collapse: collapse;
   }
@@ -113,7 +115,7 @@
     border-color: #ddd;
   }
 
-  tbody tr:hover td.non-editable {
+  tbody tr:hover td.msgid {
     background-color: rgb(240, 250, 250);
     position: relative;
     border-left: 2px solid rgba(63, 207, 63, .75);
@@ -128,8 +130,19 @@
     color: #888;
   }
 
-  th {
-    padding: 12px;
+  td {
+    position: relative;
+    padding: 0;
+  }
+
+  textarea {
+    border: 0 none;
+    background: transparent;
+    resize: none;
+    width: calc(100% - 2 * 12px);
+    display: block;
+    outline: none;
+    padding: 12px 12px 20px;
   }
 
 </style>
