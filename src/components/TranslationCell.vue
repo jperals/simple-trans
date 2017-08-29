@@ -115,6 +115,7 @@
     methods: {
       change (language, msgid, event) {
         this.saveTranslation(language, msgid, event)
+        this.notifyHeight()
       },
       saveTranslation (language, msgid, event) {
         if (event) {
@@ -150,7 +151,7 @@
         }
       },
       notifyHeight () {
-        this.$emit('cellheight', this.$refs.textarea.scrollHeight)
+        this.$emit('cellheight', this.languageId, this.$refs.textarea.scrollHeight)
       }
     }
   }

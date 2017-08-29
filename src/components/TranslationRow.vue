@@ -6,7 +6,7 @@
                     :style="{ height: Number(cellHeight || 0) - 32 + 'px' }">{{ msgId }}</textarea>
     </td>
     <translation-cell v-for="(translation, languageId) in translations"
-                      v-on:cellheight="calculateHeight"
+                      v-on:cellheight="updateHeight"
                       :cell-height="cellHeight"
                       :key="languageId"
                       :msg-id="msgId"
@@ -24,7 +24,7 @@
     },
     data: function () {
       return {
-        cellHeight: 0
+        cellHeights: {}
       }
     },
     props: [
@@ -36,8 +36,18 @@
       getRowId (index) {
         return 'msgid-' + index
       },
-      calculateHeight (height) {
-        this.cellHeight = Math.max(this.cellHeight || 0, height)
+      updateHeight (languageId, height) {
+        this.cellHeights[languageId] = height
+        this.cellHeights = Object.assign({}, this.cellHeights)
+      }
+    },
+    computed: {
+      cellHeight: function () {
+        let max = 0
+        for (let k of Object.keys(this.cellHeights)) {
+          max = Math.max(max, this.cellHeights[k])
+        }
+        return max
       }
     }
   }
