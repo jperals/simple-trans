@@ -3,9 +3,11 @@
     <textarea class="translation"
               v-if="languageId"
               v-model="translationData[msgId]"
+              ref="textarea"
               @keyup="change(languageId, msgId, $event)"
               @paste="change(languageId, msgId, $event)"
               @delete="change(languageId, msgId, $event)"
+              :style="{ height: Number(cellHeight || 0) - 32 + 'px' }"
               :placeholder="msgId">
     </textarea>
     <div class="status">
@@ -95,6 +97,7 @@
   Vue.component('icon', Icon)
   export default {
     props: [
+      'cellHeight',
       'languageId',
       'msgId',
       'translationData'
@@ -107,16 +110,14 @@
       }
     },
     mounted: function () {
-      this.autosize()
+      this.notifyHeight()
     },
     methods: {
       change (language, msgid, event) {
-        this.autosize()
         this.saveTranslation(language, msgid, event)
       },
       saveTranslation (language, msgid, event) {
         if (event) {
-          this.autosize()
           event.preventDefault()
           this.saved = false
           this.unresolved += 1
@@ -148,11 +149,8 @@
             }.bind(this))
         }
       },
-      autosize () {
-        let textarea = this.$el.querySelector('textarea')
-        let tableCell = this.$refs['table-cell']
-        let maxHeight = Math.max(textarea.scrollHeight, tableCell.clientHeight)
-        textarea.style.height = maxHeight - 32 + 'px' // Substract paddingTop + paddingBottom
+      notifyHeight () {
+        this.$emit('cellheight', this.$refs.textarea.scrollHeight)
       }
     }
   }

@@ -11,24 +11,18 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(msgid, index) in json.msgids" v-bind:id="getRowId(index)">
-        <td class="msgid">
-          <textarea disabled
-                    class="non-editable">{{ msgid }}</textarea>
-        </td>
-        <translation-cell v-for="(translation, languageId) in json.translations"
-                          :key="languageId"
-                          :msg-id="msgid"
-                          :language-id="languageId"
-                          :translation-data="translation">
-        </translation-cell>
-      </tr>
+      <translation-row v-for="(msgid, index) in json.msgids"
+        :key="index"
+        :msg-id="msgid"
+        :row-index="index"
+        :translations="json.translations">
+      </translation-row>
     </tbody>
   </table>
 </template>
 
 <script>
-  import TranslationCell from './TranslationCell.vue'
+  import TranslationRow from './TranslationRow.vue'
   export default {
     name: 'hello',
     data () {
@@ -38,7 +32,7 @@
       }
     },
     components: {
-      'translation-cell': TranslationCell
+      'translation-row': TranslationRow
     },
     methods: {
       getJson () {
@@ -80,9 +74,6 @@
           .catch(function (err) {
             console.error(err)
           })
-      },
-      getRowId (index) {
-        return 'msgid-' + index
       }
     }
   }
