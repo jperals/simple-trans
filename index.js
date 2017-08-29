@@ -71,3 +71,19 @@ app.get('/languages', function(req, res) {
     res.json(languages)
   })
 })
+
+app.get('/translations/until', function(req, res) {
+  const languageId = req.body.language
+  const filePath = [l10nPath, languageId + '.json'].join('/')
+  const until = req.body.until
+  jsonfile.readFile(filePath, function (err, obj) {
+    if(err) {
+      console.error(err)
+      res.status(500)
+      res.send({ error: err })
+    }
+    else {
+
+    }
+  })
+})

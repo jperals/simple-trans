@@ -11,7 +11,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(msgid, index) in json.msgids" v-bind:id="getRowId(index)">
+      <tr v-for="(msgid, index) in json.msgids" v-if="index >= firstRow && index <= firstRow + nRows" v-bind:id="getRowId(index)">
         <td class="msgid">
           <textarea disabled
                     class="non-editable">{{ msgid }}</textarea>
@@ -33,12 +33,32 @@
     name: 'hello',
     data () {
       return {
+        languages: [],
         json: this.getJson(),
-        unresolved: 0
+        firstRow: 0,
+        nRows: 50
       }
     },
     components: {
       'translation-cell': TranslationCell
+    },
+    mounted: function () {
+      this.ticking = false
+      this.scrollTolerance = 500 // How close to the end of the content must we be to load a new batch
+      this.batch = 100 // How many rows do we want to load per batch
+      window.addEventListener('scroll', function (e) {
+        if (!this.ticking) {
+          window.requestAnimationFrame(function () {
+            if (this.$el && this.$el.clientHeight) {
+              if (window.scrollY > this.$el.clientHeight - window.innerWidth - this.scrollTolerance) {
+                this.nRows += this.batch
+              }
+            }
+            this.ticking = false
+          }.bind(this))
+        }
+        this.ticking = true
+      }.bind(this))
     },
     methods: {
       getJson () {
