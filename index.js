@@ -4,8 +4,6 @@ const fs = require('fs')
 const jsonfile = require('jsonfile')
 const l10nPath = 'static/l10n'
 
-console.log(process.env.NODE_ENV)
-
 var app = express()
 
 app.use(express.static('dist'))
