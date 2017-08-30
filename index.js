@@ -8,6 +8,9 @@ console.log(process.env.NODE_ENV)
 
 var app = express()
 
+app.use(express.static('dist'))
+app.use('/static', express.static('static'))
+
 app.use(bodyParser.json())
 
 app.use(function (req, res, next) {
