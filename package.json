@@ -5,6 +5,7 @@
   "author": "Joan Perals",
   "private": false,
   "scripts": {
+    "start": "node index.js",
     "dev": "node index.js & node build/dev-server.js",
     "build": "node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
