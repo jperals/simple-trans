@@ -124,7 +124,7 @@
           this.unresolved += 1
           var headers = new Headers()
           headers.append('Content-Type', 'application/json')
-          const url = 'http://localhost:3000/translate'
+          const url = process.env.BACKEND_URL + '/translate'
           const opts = {
             headers: headers,
             method: 'PUT',

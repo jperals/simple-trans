@@ -63,7 +63,7 @@
           method: 'GET'
         }
         opts.headers.append('Content-Type', 'application/json')
-        fetch('http://localhost:3000/languages', opts)
+        fetch(process.env.BACKEND_URL + '/languages', opts)
           .then(function (response) {
             return response.json()
           })
