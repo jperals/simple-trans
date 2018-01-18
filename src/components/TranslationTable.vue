@@ -2,12 +2,12 @@
   <table v-if="json">
     <thead>
       <tr>
-        <th>
-          source
-        </th>
-        <th v-for="(translation, languageId) in json.translations">
-          {{ languageId }}
-        </th>
+        <search-cell></search-cell>
+        <search-cell
+          v-for="(translation, languageId) in json.translations"
+          :language-id="languageId"
+          :key="index"
+        ></search-cell>
       </tr>
     </thead>
     <tbody>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+  import SearchCell from './SearchCell.vue'
   import TranslationRow from './TranslationRow.vue'
   export default {
     name: 'hello',
@@ -36,6 +37,7 @@
       }
     },
     components: {
+      'search-cell': SearchCell,
       'translation-row': TranslationRow
     },
     mounted: function () {
