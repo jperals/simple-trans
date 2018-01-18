@@ -28,7 +28,7 @@
   input {
     border: 0 none;
     box-sizing: border-box;
-    padding: $grid-gutter*1.5 $grid-gutter;
+    padding: $grid-gutter*2 $grid-gutter;
     width: 100%;
     font-size: 14px;
     &::placeholder {
@@ -39,14 +39,14 @@
       opacity: 0;
     }
     &:focus {
-      outline: 1px solid rgba(80, 130, 180, .75);
+      outline: 1px solid rgba(110, 160, 240, .75);
       outline-offset: 1px;
     }
   }
   .icon {
     position: absolute;
     right: $grid-gutter;
-    top: $grid-gutter*1.5;
+    top: $grid-gutter*2;
     opacity: 0;
     transition: opacity $transition-time;
     pointer-events: none;

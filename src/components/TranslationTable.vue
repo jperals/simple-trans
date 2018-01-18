@@ -128,18 +128,18 @@
   }
 
   tbody tr:hover {
-    background-color: rgb(250, 250, 250);
+    background-color: rgb(235, 240, 240);
     border-color: #ddd;
   }
 
   tbody tr:hover td.msgid {
-    background-color: rgb(240, 250, 250);
+    background-color: rgb(230, 245, 245);
     position: relative;
     border-left: 2px solid rgba(63, 207, 63, .75);
   }
 
   th, td {
-    border: 1px solid #eee;
+    border: 1px solid #e9e9e9;
     vertical-align: top;
   }
 
