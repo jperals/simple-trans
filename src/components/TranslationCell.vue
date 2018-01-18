@@ -29,7 +29,7 @@
   textarea:focus {
     background-color: rgb(250, 255, 250);
     outline: 1px solid rgba(63, 207, 63, .75);
-    outline-offset: 0;
+    outline-offset: 1px;
   }
   textarea::placeholder {
     color: rgba(0, 0, 0, .25);

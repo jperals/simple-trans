@@ -102,9 +102,12 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="scss">
+  @import './variables';
+
   table {
     border-collapse: collapse;
+    min-width: 100%;
   }
 
   thead {
@@ -114,9 +117,8 @@
     z-index: 10;
   }
 
-  th,
   td {
-    padding: 12px;
+    padding: $grid-gutter;
   }
 
   th {
@@ -146,6 +148,7 @@
   td {
     position: relative;
     padding: 0;
+    min-width: 150px;
   }
 
   textarea {

@@ -11,6 +11,9 @@ export default {
 </script>
 
 <style>
+  body {
+    margin: 0;
+  }
 #app,
 #app textarea {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
