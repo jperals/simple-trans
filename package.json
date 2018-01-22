@@ -19,7 +19,8 @@
     "jsonfile": "^2.4.0",
     "vue": "^2.2.2",
     "vue-awesome": "^2.2.1",
-    "vue-router": "^2.2.0"
+    "vue-router": "^2.2.0",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
