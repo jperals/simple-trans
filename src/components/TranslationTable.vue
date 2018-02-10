@@ -6,7 +6,7 @@
         <search-cell
           v-for="(translation, languageId) in json.translations"
           :language-id="languageId"
-          :key="index"
+          :key="languageId"
         ></search-cell>
       </tr>
     </thead>
@@ -26,12 +26,11 @@
 <script>
   import SearchCell from './SearchCell.vue'
   import TranslationRow from './TranslationRow.vue'
+  import store from './store'
   export default {
     name: 'hello',
     data () {
       return {
-        languages: [],
-        json: this.getJson(),
         firstRow: 0,
         nRows: 50
       }
@@ -58,46 +57,12 @@
         this.ticking = true
       }.bind(this))
     },
-    methods: {
-      getJson () {
-        const opts = {
-          headers: new Headers(),
-          method: 'GET'
+    computed: {
+      json () {
+        return {
+          msgids: store.state.msgids,
+          translations: store.state.translations
         }
-        opts.headers.append('Content-Type', 'application/json')
-        fetch(process.env.BACKEND_URL + '/languages', opts)
-          .then(function (response) {
-            return response.json()
-          })
-          .then(function (languages) {
-            const promises = []
-            languages.forEach(function (id) {
-              promises.push(new Promise(function (resolve, reject) {
-                fetch('static/l10n/' + id + '.json', {
-                  headers: new Headers(),
-                  method: 'GET'
-                })
-                  .then(function (response) {
-                    resolve(response.json())
-                  })
-              }))
-            })
-            Promise.all(promises)
-              .then(function (results) {
-                const translations = {}
-                const msgids = Object.keys(results[0])
-                languages.forEach(function (languageId, i) {
-                  translations[languageId] = results[i]
-                })
-                this.json = {
-                  'msgids': msgids,
-                  'translations': translations
-                }
-              }.bind(this))
-          }.bind(this))
-          .catch(function (err) {
-            console.error(err)
-          })
       }
     }
   }

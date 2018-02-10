@@ -1,29 +1,30 @@
 const bodyParser = require('body-parser')
+const cors = require('cors')
 const express = require('express')
 const fs = require('fs')
 const jsonfile = require('jsonfile')
 const l10nPath = 'static/l10n'
+const mosca = require('mosca')
+
+const config = {
+  BACKEND_URL: 'localhost',
+  BACKEND_PORT: 5000
+}
 
 var app = express()
 
-app.use(express.static('dist'))
-app.use('/static', express.static('static'))
-
+app.use(cors())
 app.use(bodyParser.json())
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+app.use(express.static('dist'))
+app.use('/static', express.static('static'))
 
 app.get('/', function (req, res) {
   res.send('Hello World!')
 })
 
-app.listen(5000, function () {
-  console.log('Server listening on port 5000!')
+app.listen(config.BACKEND_PORT, function () {
+  console.log('Server listening on port', config.BACKEND_PORT)
 })
 
 app.put('/translate', function(req, res) {
@@ -87,4 +88,36 @@ app.get('/translations/until', function(req, res) {
 
     }
   })
+})
+
+const broker = new mosca.Server({
+  "port": config.MQTT_PORT || 1883,
+  "http": {
+    "url": config.MQTT_HTTP_URL || "ws://localhost",
+    "port": config.MQTT_HTTP_PORT || 9000,
+    "bundle": true,
+    "static": "./"
+  }
+})
+
+broker.on('ready', function () {
+  console.log('Mosca server is up and running')
+})
+broker.on('clientConnected', function(client) {
+  console.log('Client connected', client.id)
+})
+// Fired when a message is received
+broker.on('published', function(packet, client) {
+  let payload = packet.payload;
+  try {
+      payload = payload.toString()
+  } catch (e) {
+      // Not a string, no problem
+      try {
+          payload = JSON.parse(payload)
+      } catch (e) {
+          // Not a JSON object, no problem
+      }
+  }
+  console.log('Published message:', payload)
 })

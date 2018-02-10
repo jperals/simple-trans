@@ -94,6 +94,7 @@
   import 'vue-awesome/icons/circle-o-notch'
   import 'vue-awesome/icons/exclamation-triangle'
   import Icon from 'vue-awesome/components/Icon.vue'
+  import httpApi from './http-api'
   Vue.component('icon', Icon)
   export default {
     props: [
@@ -122,32 +123,22 @@
           event.preventDefault()
           this.saved = false
           this.unresolved += 1
-          var headers = new Headers()
-          headers.append('Content-Type', 'application/json')
-          const url = process.env.BACKEND_URL + '/translate'
-          const opts = {
-            headers: headers,
-            method: 'PUT',
-            body: JSON.stringify({
-              language: language,
-              msgid: msgid,
-              translation: event.target.value
-            })
-          }
-          fetch(
-            url,
-            opts)
-            .then(function (response) {
-              return response.text() // Wait for ReadableStream to finish
-            })
-            .then(function (response) {
-              this.unresolved -= 1
-              this.saved = this.unresolved < 1
-            }.bind(this))
-            .catch(function (error) {
-              this.unresolved -= 1
-              this.error = error
-            }.bind(this))
+          httpApi.put('translate', {
+            language: language,
+            msgid: msgid,
+            translation: event.target.value
+          })
+          .then(function (response) {
+            return response.text() // Wait for ReadableStream to finish
+          })
+          .then(function (response) {
+            this.unresolved -= 1
+            this.saved = this.unresolved < 1
+          }.bind(this))
+          .catch(function (error) {
+            this.unresolved -= 1
+            this.error = error
+          }.bind(this))
         }
       },
       notifyHeight () {
