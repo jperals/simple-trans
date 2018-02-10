@@ -21,7 +21,9 @@ function filterTranslations (translations, filters) {
     filtered[languageId] = {}
   }
   for (const msgid of msgids) {
-    const row = {}
+    const row = {
+      src: msgid
+    }
     for (const languageId of languageIds) {
       row[languageId] = translations[languageId][msgid]
     }
