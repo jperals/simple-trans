@@ -94,7 +94,7 @@
   import 'vue-awesome/icons/circle-o-notch'
   import 'vue-awesome/icons/exclamation-triangle'
   import Icon from 'vue-awesome/components/Icon.vue'
-  import httpApi from './http-api'
+  import store from './store'
   Vue.component('icon', Icon)
   export default {
     props: [
@@ -123,11 +123,12 @@
           event.preventDefault()
           this.saved = false
           this.unresolved += 1
-          httpApi.put('translate', {
-            language: language,
-            msgid: msgid,
+          store.dispatch('setTranslation', {
+            language,
+            msgid,
             translation: event.target.value
           })
+            // Todo down here
           .then(function (response) {
             return response.text() // Wait for ReadableStream to finish
           })

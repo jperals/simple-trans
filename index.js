@@ -3,8 +3,9 @@ const cors = require('cors')
 const express = require('express')
 const fs = require('fs')
 const jsonfile = require('jsonfile')
-const l10nPath = 'static/l10n'
 const mosca = require('mosca')
+const mqtt = require('mqtt')
+const l10nPath = 'static/l10n'
 
 const config = {
   BACKEND_URL: 'localhost',
@@ -27,33 +28,43 @@ app.listen(config.BACKEND_PORT, function () {
   console.log('Server listening on port', config.BACKEND_PORT)
 })
 
+function translate ({ languageId, magid, translation }) {
+  return new Promise(function(resolve, reject) {
+    const filePath = [l10nPath, languageId + '.json'].join('/')
+    jsonfile.readFile(filePath, function(err, obj) {
+      if(err) {
+        reject(err)
+      }
+      else {
+        obj[msgid] = translation
+        jsonfile.writeFile(filePath, obj, { spaces: 4 }, function(err) {
+          if(err) {
+            reject(err)
+          }
+          else {
+            resolve()
+          }
+        })
+      }
+
+    })
+  })
+}
+
 app.put('/translate', function(req, res) {
   const languageId = req.body.language
   const msgid = req.body.msgid
   const translation = req.body.translation
-  const filePath = [l10nPath, languageId + '.json'].join('/')
-  jsonfile.readFile(filePath, function(err, obj) {
-    if(err) {
+  translate({ languageId, msgid, translation })
+    .then(function () {
+      console.log('File written')
+      res.send('ok')
+    })
+    .catch(function (err) {
       console.error(err)
       res.status(500)
       res.send({ error: err })
-    }
-    else {
-      obj[msgid] = translation
-      jsonfile.writeFile(filePath, obj, { spaces: 4 }, function(err) {
-        if(err) {
-          console.error(err)
-          res.status(500)
-          res.send({ error: err })
-        }
-        else {
-          console.log('File written')
-          res.send('ok')
-        }
-      })
-    }
-
-  })
+    })
 })
 
 app.get('/languages', function(req, res) {
@@ -120,4 +131,38 @@ broker.on('published', function(packet, client) {
       }
   }
   console.log('Published message:', payload)
+})
+
+const mqttClient = mqtt.connect(config.MQTT_HTTP_URL || "ws://localhost" + ':' + config.MQTT_HTTP_PORT || 9000)
+
+client.on('connect', function () {
+  console.log("connected");
+  client.subscribe('presence')
+  client.publish('presence', 'MQTT API connected')
+})
+
+client.on('error', (error)=>{
+  console.error('MQTT', error)
+})
+
+mqttClient.on('message', function (topic, message) {
+  let data
+  try {
+    data = JSON.parse(message.toString())
+  }
+  catch (e) {
+    console.warn('Could not parse message')
+    return
+  }
+  switch (data) {
+    case 'set':
+      translate(data)
+        .then(function () {
+          mqtt.publish('set', data)
+        })
+        .catch(function (err) {
+          mqtt.publish('error', err)
+        })
+      break;
+  }
 })

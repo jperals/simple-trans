@@ -18,6 +18,9 @@ const store = new Vuex.Store({
     setTranslations (state, { msgids, translations }) {
       state.msgids = msgids
       state.translations = translations
+    },
+    setTranslation (state, { languageId, msgid, str }) {
+      state.translations[languageId][msgid] = str
     }
   },
   actions: {
@@ -45,6 +48,13 @@ const store = new Vuex.Store({
         console.error(err)
       })
     }
+  },
+  setTranslation ({ commit }, { languageId, msgid, translation }) {
+    mqttApi.client.publish('set', JSON.stringify({
+      languageId,
+      msgid,
+      translation
+    }))
   }
 })
 
@@ -53,6 +63,14 @@ httpApi.init({
 })
 
 mqttApi.connect(process.env.MQTT_HTTP_URL + ':' + process.env.MQTT_HTTP_PORT)
+
+mqttApi.client.on('message', function (topic, message) {
+  switch (topic) {
+    case 'set':
+      store.commit('setTranslation', JSON.parse(message.toString()))
+      break
+  }
+})
 
 store.dispatch('getTranslations')
 
