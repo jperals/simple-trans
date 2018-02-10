@@ -1,0 +1,11 @@
+{
+  "ignore": [
+    "build",
+    "config",
+    "node_modules",
+    "src",
+    "static",
+    "test",
+    "README.md"
+  ]
+}

@@ -28,7 +28,7 @@ app.listen(config.BACKEND_PORT, function () {
   console.log('Server listening on port', config.BACKEND_PORT)
 })
 
-function translate ({ languageId, magid, translation }) {
+function translate ({ languageId, msgid, translation }) {
   return new Promise(function(resolve, reject) {
     const filePath = [l10nPath, languageId + '.json'].join('/')
     jsonfile.readFile(filePath, function(err, obj) {
@@ -46,22 +46,23 @@ function translate ({ languageId, magid, translation }) {
           }
         })
       }
-
     })
   })
 }
 
 app.put('/translate', function(req, res) {
-  const languageId = req.body.language
+  const languageId = req.body.languageId
   const msgid = req.body.msgid
   const translation = req.body.translation
   translate({ languageId, msgid, translation })
     .then(function () {
       console.log('File written')
+      mqttClient.publish('set', JSON.stringify({ languageId, msgid, translation }))
       res.send('ok')
     })
     .catch(function (err) {
       console.error(err)
+      mqttClient.publish('error', err)
       res.status(500)
       res.send({ error: err })
     })
@@ -133,36 +134,30 @@ broker.on('published', function(packet, client) {
   console.log('Published message:', payload)
 })
 
-const mqttClient = mqtt.connect(config.MQTT_HTTP_URL || "ws://localhost" + ':' + config.MQTT_HTTP_PORT || 9000)
+const mqttHttpPort = config.MQTT_HTTP_PORT || 9000
+const mqttUrl = (config.MQTT_HTTP_URL || 'ws://localhost') + ':' + mqttHttpPort
+const mqttClient = mqtt.connect(mqttUrl)
 
-client.on('connect', function () {
-  console.log("connected");
-  client.subscribe('presence')
-  client.publish('presence', 'MQTT API connected')
+mqttClient.on('connect', function () {
+  mqttClient.subscribe('presence')
+  mqttClient.publish('presence', 'MQTT API connected')
 })
 
-client.on('error', (error)=>{
+mqttClient.on('error', (error)=>{
   console.error('MQTT', error)
 })
 
 mqttClient.on('message', function (topic, message) {
-  let data
+  let data = message.toString()
   try {
-    data = JSON.parse(message.toString())
+    data = JSON.parse(data)
   }
   catch (e) {
-    console.warn('Could not parse message')
-    return
+    // Not a JSON object
   }
   switch (data) {
     case 'set':
       translate(data)
-        .then(function () {
-          mqtt.publish('set', data)
-        })
-        .catch(function (err) {
-          mqtt.publish('error', err)
-        })
       break;
   }
 })

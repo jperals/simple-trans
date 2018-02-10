@@ -2,14 +2,12 @@
   <td ref="table-cell">
     <textarea class="translation"
               v-if="languageId"
-              v-model="translationData[msgId]"
               ref="textarea"
               @keyup="change(languageId, msgId, $event)"
               @paste="change(languageId, msgId, $event)"
               @delete="change(languageId, msgId, $event)"
               :style="{ height: Number(cellHeight || 0) - 32 + 'px' }"
-              :placeholder="msgId">
-    </textarea>
+              :placeholder="msgId">{{ translation }}</textarea>
     <div class="status">
       <span v-if="unresolved" class="saving">
         <icon name="circle-o-notch" class="icon spinner"></icon>
@@ -101,10 +99,12 @@
       'cellHeight',
       'languageId',
       'msgId',
+      'translation',
       'translationData'
     ],
     data: function () {
       return {
+        translationCopy: this.translation,
         error: false,
         saved: false,
         unresolved: 0
@@ -118,17 +118,16 @@
         this.saveTranslation(language, msgid, event)
         this.notifyHeight()
       },
-      saveTranslation (language, msgid, event) {
+      saveTranslation (languageId, msgid, event) {
         if (event) {
           event.preventDefault()
           this.saved = false
           this.unresolved += 1
           store.dispatch('setTranslation', {
-            language,
+            languageId,
             msgid,
             translation: event.target.value
           })
-            // Todo down here
           .then(function (response) {
             return response.text() // Wait for ReadableStream to finish
           })
