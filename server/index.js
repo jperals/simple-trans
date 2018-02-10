@@ -3,14 +3,12 @@ const cors = require('cors')
 const express = require('express')
 const fs = require('fs')
 const jsonfile = require('jsonfile')
-const mosca = require('mosca')
 const mqtt = require('mqtt')
 const l10nPath = 'static/l10n'
+const config = require('./config')
+const mqttBroker = require('./mqtt-broker')
 
-const config = {
-  BACKEND_URL: 'localhost',
-  BACKEND_PORT: 5000
-}
+mqttBroker.init()
 
 var app = express()
 
@@ -100,38 +98,6 @@ app.get('/translations/until', function(req, res) {
 
     }
   })
-})
-
-const broker = new mosca.Server({
-  "port": config.MQTT_PORT || 1883,
-  "http": {
-    "url": config.MQTT_HTTP_URL || "ws://localhost",
-    "port": config.MQTT_HTTP_PORT || 9000,
-    "bundle": true,
-    "static": "./"
-  }
-})
-
-broker.on('ready', function () {
-  console.log('Mosca server is up and running')
-})
-broker.on('clientConnected', function(client) {
-  console.log('Client connected', client.id)
-})
-// Fired when a message is received
-broker.on('published', function(packet, client) {
-  let payload = packet.payload;
-  try {
-      payload = payload.toString()
-  } catch (e) {
-      // Not a string, no problem
-      try {
-          payload = JSON.parse(payload)
-      } catch (e) {
-          // Not a JSON object, no problem
-      }
-  }
-  console.log('Published message:', payload)
 })
 
 const mqttHttpPort = config.MQTT_HTTP_PORT || 9000

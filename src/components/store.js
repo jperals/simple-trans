@@ -32,8 +32,11 @@ const store = new Vuex.Store({
       httpApi.get('languages')
         .then(function (languages) {
           const promises = []
-          languages.forEach(function (id) {
-            promises.push(httpApi.get('static/l10n/' + id + '.json'))
+          languages.forEach(function (languageId) {
+            promises.push(httpApi.get('translations', {
+              languageId,
+              filters: filters && filters[languageId]
+            }))
           })
           Promise.all(promises)
             .then(function (results) {
