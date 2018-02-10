@@ -15,8 +15,8 @@ const store = new Vuex.Store({
     setFilter (state, {languageId, expression}) {
       state.filters[languageId] = expression
     },
-    setTranslations (state, {msgids, translations}) {
-      state.msgids = msgids
+    setTranslations (state, {translations}) {
+      state.msgids = Object.keys(translations[Object.keys(translations)[0]])
       state.translations = translations
     },
     setTranslation (state, {languageId, msgid, translation}) {
@@ -26,27 +26,16 @@ const store = new Vuex.Store({
   actions: {
     setFilter ({commit, dispatch}, {languageId, expression}) {
       commit.setFilter({languageId, expression})
-      dispatch('getTranslations', {filters: {languageId, expression}})
+      dispatch('getTranslations', {searchQuery: {languageId, expression}})
     },
-    getTranslations ({commit, state, filters}) {
-      httpApi.get('languages')
-        .then(function (languages) {
-          const promises = []
-          languages.forEach(function (languageId) {
-            promises.push(httpApi.get('translations', {
-              languageId,
-              filters: filters && filters[languageId]
-            }))
-          })
-          Promise.all(promises)
-            .then(function (results) {
-              const translations = {}
-              const msgids = Object.keys(results[0])
-              languages.forEach(function (languageId, i) {
-                translations[languageId] = results[i]
-              })
-              commit('setTranslations', {msgids, translations})
-            })
+    getTranslations ({commit, state, searchQuery}) {
+      let url = 'translations'
+      if (searchQuery) {
+        url += '&searchQuery=' + searchQuery
+      }
+      httpApi.get(url)
+        .then(function (translations) {
+          commit('setTranslations', {translations})
         })
         .catch(function (err) {
           console.error(err)

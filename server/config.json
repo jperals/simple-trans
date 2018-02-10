@@ -1,4 +1,5 @@
 {
   "BACKEND_URL": "localhost",
-  "BACKEND_PORT": 5000
+  "BACKEND_PORT": 5000,
+  "l10nPath": "static/l10n"
 }
