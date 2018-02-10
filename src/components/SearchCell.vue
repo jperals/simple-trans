@@ -1,7 +1,11 @@
 <template>
   <th>
     <input type="text"
-           :placeholder="languageId || 'source'">
+           :placeholder="languageId || 'source'"
+           @keyup="change($event)"
+           @paste="change($event)"
+           @delete="change($event)"
+           >
     <icon name="search"
           class="icon"></icon>
   </th>
@@ -11,11 +15,20 @@
   import Vue from 'vue'
   import 'vue-awesome/icons/search'
   import Icon from 'vue-awesome/components/Icon.vue'
+  import store from './store'
   Vue.component('icon', Icon)
   export default {
     props: [
       'languageId'
-    ]
+    ],
+    methods: {
+      change (event) {
+        store.dispatch('setFilter', {
+          languageId: this.languageId,
+          expression: event.target.value
+        })
+      }
+    }
   }
 </script>
 

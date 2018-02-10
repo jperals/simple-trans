@@ -25,13 +25,13 @@ const store = new Vuex.Store({
   },
   actions: {
     setFilter ({commit, dispatch}, {languageId, expression}) {
-      commit.setFilter({languageId, expression})
-      dispatch('getTranslations', {searchQuery: {languageId, expression}})
+      commit('setFilter', {languageId, expression})
+      dispatch('getTranslations')
     },
-    getTranslations ({commit, state, searchQuery}) {
+    getTranslations ({commit, state}) {
       let url = 'translations'
-      if (searchQuery) {
-        url += '&searchQuery=' + searchQuery
+      if (state.filters && Object.keys(state.filters).length) {
+        url += '?searchQuery=' + JSON.stringify(state.filters)
       }
       httpApi.get(url)
         .then(function (translations) {

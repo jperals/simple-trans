@@ -14,7 +14,7 @@
       <translation-row
         v-for="(msgid, index) in json.msgids"
         v-if="index >= firstRow && index <= firstRow + nRows"
-        :key="index"
+        :key="msgid"
         :msg-id="msgid"
         :row-index="index"
         :translations="json.translations">

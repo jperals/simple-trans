@@ -4,6 +4,7 @@ const jsonfile = require('jsonfile')
 const mqttClient = require('./mqtt-client')
 
 const getLanguages = require('./get-languages')
+const searchFilter = require('./search-filter')
 const translate = require('./translate')
 
 const l10nPath = require('./config').l10nPath
@@ -39,6 +40,7 @@ app.get('/languages', function (req, res) {
 
 app.get('/translations', function (req, res) {
   const languageId = req.query.languageId
+  const searchQuery = req.query.searchQuery
   if (languageId) {
     const filePath = [l10nPath, languageId + '.json'].join('/')
     jsonfile.readFile(filePath, function (err, obj) {
@@ -54,9 +56,9 @@ app.get('/translations', function (req, res) {
   } else {
     getLanguages()
       .then(function (languages) {
-        const translations = {}
+        let translations = {}
         const promises = []
-        languages.map(function (languageId) {
+        for (const languageId of languages) {
           promises.push(new Promise(function (resolve, reject) {
             const filePath = [l10nPath, languageId + '.json'].join('/')
             jsonfile.readFile(filePath, function (err, obj) {
@@ -68,11 +70,24 @@ app.get('/translations', function (req, res) {
               }
             })
           }))
-        })
+        }
         Promise.all(promises)
           .then(function () {
+            if (searchQuery) {
+              translations = searchFilter(translations, JSON.parse(searchQuery))
+            }
             res.send(translations)
           })
+          .catch(function (err) {
+            console.error(err)
+            res.status(500)
+            res.send({error: err})
+          })
+      })
+      .catch(function (err) {
+        console.error(err)
+        res.status(500)
+        res.send({error: err})
       })
   }
 })
