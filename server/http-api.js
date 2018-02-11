@@ -4,6 +4,7 @@ const jsonfile = require('jsonfile')
 const mqttClient = require('./mqtt-client')
 
 const getLanguages = require('./get-languages')
+const getProjects = require('./get-projects')
 const searchFilter = require('./search-filter')
 const translate = require('./translate')
 
@@ -31,6 +32,17 @@ app.get('/languages', function (req, res) {
   getLanguages()
     .then(function (languages) {
       res.json(languages)
+    })
+    .catch(function (err) {
+      res.status(500)
+      res.send({error: err})
+    })
+})
+
+app.get('/projects', function (req, res) {
+  getProjects()
+    .then(function (projects) {
+      res.json(projects)
     })
     .catch(function (err) {
       res.status(500)

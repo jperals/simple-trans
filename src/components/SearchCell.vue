@@ -40,7 +40,7 @@
   input {
     border: 0 none;
     box-sizing: border-box;
-    padding: $grid-gutter*2 $grid-gutter;
+    padding: $grid-gutter $grid-gutter;
     width: 100%;
     font-size: 14px;
     &:focus {
@@ -51,7 +51,7 @@
   .icon {
     position: absolute;
     right: $grid-gutter;
-    top: $grid-gutter*2;
+    top: $grid-gutter;
     opacity: .3;
     transition: opacity $transition-time;
     pointer-events: none;

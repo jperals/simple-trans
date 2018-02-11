@@ -10,6 +10,7 @@ const store = new Vuex.Store({
     filters: {},
     msgids: {},
     project: undefined,
+    projects: [],
     translations: {}
   },
   mutations: {
@@ -18,6 +19,9 @@ const store = new Vuex.Store({
     },
     setProject (state, projectId) {
       state.project = projectId
+    },
+    setProjects (state, projects) {
+      state.projects = projects
     },
     setTranslations (state, {translations}) {
       state.msgids = Object.keys(translations[Object.keys(translations)[0]])
@@ -28,11 +32,14 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    setFilter ({commit, dispatch, state}, {languageId, expression}) {
-      if (state.filters[languageId] !== expression) {
-        commit('setFilter', {languageId, expression})
-        dispatch('getTranslations')
-      }
+    getProjects ({ commit }) {
+      httpApi.get('projects')
+        .then(function (projects) {
+          commit('setProjects', projects)
+        })
+        .catch(function (err) {
+          console.error(err)
+        })
     },
     getTranslations ({commit, state}) {
       let url = 'translations/' + state.project
@@ -46,6 +53,12 @@ const store = new Vuex.Store({
         .catch(function (err) {
           console.error(err)
         })
+    },
+    setFilter ({commit, dispatch, state}, {languageId, expression}) {
+      if (state.filters[languageId] !== expression) {
+        commit('setFilter', {languageId, expression})
+        dispatch('getTranslations')
+      }
     },
     setTranslation ({commit}, {languageId, msgid, translation}) {
       return httpApi.put('translate', {

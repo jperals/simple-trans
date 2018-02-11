@@ -1,14 +1,19 @@
 <template>
   <table v-if="json">
     <thead>
-    <tr class="project-name">
-      <td :colspan="Object.keys(json.translations).length + 1">
-        {{ $route.params.project }}
+    <tr>
+      <td class="breadcrumbs"
+          :colspan="Object.keys(json.translations).length + 1">
+        <router-link class="back-button" to="/">My Projects</router-link>
+        /
+        <span class="current">
+          {{ $route.params.project }}
+        </span>
       </td>
     </tr>
     <tr class="languages">
-      <td>Source</td>
-      <td
+      <td>source</td>
+      <td class="language-id"
         v-for="(translation, languageId) in json.translations"
         :key="languageId"
       >{{ languageId }}
@@ -102,9 +107,12 @@
     td {
       padding: $grid-gutter*2 $grid-gutter;
     }
-    tr.project-name td,
-    tr.languages td {
+    .breadcrumbs .current,
+    tr.languages td.language-id {
       font-weight: bold;
+    }
+    .breadcrumbs a {
+      text-decoration: none;
     }
   }
 
@@ -122,13 +130,13 @@
   }
 
   tbody tr:hover td.msgid {
-    background-color: rgb(230, 245, 245);
+    background-color: $bg-highlight;
     position: relative;
     border-left: 2px solid rgba(63, 207, 63, .75);
   }
 
   th, td {
-    border: 1px solid #e9e9e9;
+    border: $border-light;
     vertical-align: top;
   }
 
