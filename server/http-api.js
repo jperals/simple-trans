@@ -59,6 +59,9 @@ app.get('/translations', function (req, res) {
         let translations = {}
         const promises = []
         for (const languageId of languages) {
+          // Populate the indices with empty objects to prevent the bad effect of race conditions.
+          // Otherwise, the order of the keys seems to depend on the order in which the content from the the file system is retrieved, which is not reliable.
+          translations[languageId] = {}
           promises.push(new Promise(function (resolve, reject) {
             const filePath = [l10nPath, languageId + '.json'].join('/')
             jsonfile.readFile(filePath, function (err, obj) {
