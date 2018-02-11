@@ -1,35 +1,38 @@
 <template>
-  <table v-if="json">
-    <thead>
-    <tr>
-      <th class="breadcrumbs"
-          :colspan="Object.keys(json.translations).length + 1">
-        <router-link class="back-button" to="/">My Projects</router-link>
-        /
-        <span class="current">
+  <div class="translation-table" v-if="json">
+    <table class="header-table">
+      <thead>
+      <tr>
+        <th class="breadcrumbs"
+            :colspan="Object.keys(json.translations).length + 1">
+          <router-link class="back-button" to="/">My Projects</router-link>
+          /
+          <span class="current">
           {{ $route.params.project }}
         </span>
-      </th>
-    </tr>
-    <tr class="languages">
-      <th>source</th>
-      <th class="language-id"
-          v-for="(translation, languageId) in json.translations"
-          :key="languageId"
-      >{{ languageId }}
+        </th>
+      </tr>
+      <tr class="languages">
+        <th>source</th>
+        <th class="language-id"
+            v-for="(translation, languageId) in json.translations"
+            :key="languageId"
+        >{{ languageId }}
 
-      </th>
-    </tr>
-    <tr>
-      <search-cell language-id="src"></search-cell>
-      <search-cell
-        v-for="(translation, languageId) in json.translations"
-        :language-id="languageId"
-        :key="languageId"
-      ></search-cell>
-    </tr>
-    </thead>
-    <tbody :class="{ loading: loading }">
+        </th>
+      </tr>
+      <tr>
+        <search-cell language-id="src"></search-cell>
+        <search-cell
+          v-for="(translation, languageId) in json.translations"
+          :language-id="languageId"
+          :key="languageId"
+        ></search-cell>
+      </tr>
+      </thead>
+    </table>
+    <table class="content-table">
+      <tbody :class="{ loading: loading }">
       <translation-row
         v-for="(msgid, index) in json.msgids"
         v-if="index >= firstRow && index <= firstRow + nRows"
@@ -38,8 +41,9 @@
         :row-index="index"
         :translations="json.translations">
       </translation-row>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -97,6 +101,19 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
   @import './variables';
+
+  .header-table {
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+  }
+  .content-table {
+    // Hard-coded height of the .header-table ...
+    margin-top: 186px;
+  }
 
   table {
     border-collapse: collapse;
