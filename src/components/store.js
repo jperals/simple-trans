@@ -7,6 +7,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    loading: false,
     filters: {},
     msgids: {},
     project: undefined,
@@ -26,6 +27,7 @@ const store = new Vuex.Store({
     setTranslations (state, {translations}) {
       state.msgids = Object.keys(translations[Object.keys(translations)[0]])
       state.translations = translations
+      state.loading = false
     },
     setTranslation (state, {languageId, msgid, projectId, translation}) {
       state.translations[languageId][msgid] = translation
@@ -42,6 +44,7 @@ const store = new Vuex.Store({
         })
     },
     getTranslations ({commit, state}) {
+      state.loading = true
       let url = 'translations/' + state.project
       if (state.filters && Object.keys(state.filters).length) {
         url += '?searchQuery=' + JSON.stringify(state.filters)

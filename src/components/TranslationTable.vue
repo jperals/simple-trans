@@ -14,9 +14,10 @@
     <tr class="languages">
       <td>source</td>
       <td class="language-id"
-        v-for="(translation, languageId) in json.translations"
-        :key="languageId"
+          v-for="(translation, languageId) in json.translations"
+          :key="languageId"
       >{{ languageId }}
+
       </td>
     </tr>
     <tr>
@@ -28,15 +29,15 @@
       ></search-cell>
     </tr>
     </thead>
-    <tbody>
-    <translation-row
-      v-for="(msgid, index) in json.msgids"
-      v-if="index >= firstRow && index <= firstRow + nRows"
-      :key="msgid"
-      :msg-id="msgid"
-      :row-index="index"
-      :translations="json.translations">
-    </translation-row>
+    <tbody :class="{ loading: loading }">
+      <translation-row
+        v-for="(msgid, index) in json.msgids"
+        v-if="index >= firstRow && index <= firstRow + nRows"
+        :key="msgid"
+        :msg-id="msgid"
+        :row-index="index"
+        :translations="json.translations">
+      </translation-row>
     </tbody>
   </table>
 </template>
@@ -85,6 +86,9 @@
           msgids: store.state.msgids,
           translations: store.state.translations
         }
+      },
+      loading () {
+        return store.state.loading
       }
     }
   }
@@ -124,15 +128,19 @@
     text-align: left;
   }
 
-  tbody tr:hover {
-    background-color: rgb(235, 240, 240);
-    border-color: #ddd;
-  }
-
-  tbody tr:hover td.msgid {
-    background-color: $bg-highlight;
-    position: relative;
-    border-left: 2px solid rgba(63, 207, 63, .75);
+  tbody {
+    &.loading {
+      opacity: .5;
+    }
+    tr:hover {
+      background-color: rgb(235, 240, 240);
+      border-color: #ddd;
+    }
+    tr:hover td.msgid {
+      background-color: $bg-highlight;
+      position: relative;
+      border-left: 2px solid rgba(63, 207, 63, .75);
+    }
   }
 
   th, td {
