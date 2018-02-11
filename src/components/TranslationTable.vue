@@ -1,6 +1,13 @@
 <template>
   <table v-if="json">
     <thead>
+      <tr class="languages">
+        <td>Source</td>
+        <td
+          v-for="(translation, languageId) in json.translations"
+          :key="languageId"
+          >{{ languageId }}</td>
+      </tr>
       <tr>
         <search-cell language-id="src"></search-cell>
         <search-cell
@@ -82,6 +89,11 @@
     top: 0;
     background: white;
     z-index: 10;
+  }
+
+  tr.languages td {
+    font-weight: bold;
+    padding: $grid-gutter*2 $grid-gutter;
   }
 
   td {

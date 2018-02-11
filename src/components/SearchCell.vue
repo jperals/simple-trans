@@ -1,7 +1,6 @@
 <template>
   <th>
     <input type="text"
-           :placeholder="languageId || 'source'"
            @keyup="change($event)"
            @paste="change($event)"
            @delete="change($event)"
@@ -44,13 +43,6 @@
     padding: $grid-gutter*2 $grid-gutter;
     width: 100%;
     font-size: 14px;
-    &::placeholder {
-      font-weight: bold;
-      transition: opacity $transition-time;
-    }
-    &:focus::placeholder {
-      opacity: 0;
-    }
     &:focus {
       outline: 1px solid rgba(110, 160, 240, .75);
       outline-offset: 1px;
@@ -60,14 +52,14 @@
     position: absolute;
     right: $grid-gutter;
     top: $grid-gutter*2;
-    opacity: 0;
+    opacity: .3;
     transition: opacity $transition-time;
     pointer-events: none;
   }
   th:hover .icon {
-    opacity: .3;
+    opacity: .6;
   }
   th input:focus + .icon {
-    opacity: .6;
+    opacity: .8;
   }
 </style>
