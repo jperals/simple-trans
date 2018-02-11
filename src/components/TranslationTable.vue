@@ -109,10 +109,11 @@
     left: 0;
     right: 0;
     z-index: 10;
+    border-bottom: 2px solid #DDD;
   }
   .content-table {
-    // Hard-coded height of the .header-table ...
-    margin-top: 186px;
+    // Hard-coded height of the .header-table + 1px ...
+    margin-top: 164px;
   }
 
   table {
@@ -126,9 +127,12 @@
     background: white;
     z-index: 10;
     text-align: left;
-    .breadcrumbs,
-    .languages th {
+    .breadcrumbs {
       padding: $grid-gutter*2 $grid-gutter;
+    }
+    .languages th {
+      font-weight: normal;
+      padding: $grid-gutter;
     }
     .breadcrumbs .current,
     tr.languages th.language-id {
@@ -144,6 +148,7 @@
   }
 
   tbody {
+    background-color: #F5F5F5;
     &.loading {
       opacity: .5;
     }
@@ -154,7 +159,6 @@
     tr:hover td.msgid {
       background-color: $bg-highlight;
       position: relative;
-      border-left: 2px solid rgba(63, 207, 63, .75);
     }
   }
 
