@@ -126,6 +126,7 @@
           store.dispatch('setTranslation', {
             languageId,
             msgid,
+            projectId: store.state.project,
             translation: event.target.value
           })
           .then(function (response) {

@@ -13,11 +13,12 @@ const l10nPath = require('./config').l10nPath
 app.put('/translate', function (req, res) {
   const languageId = req.body.languageId
   const msgid = req.body.msgid
+  const projectId = req.body.projectId
   const translation = req.body.translation
-  translate({languageId, msgid, translation})
+  translate({languageId, msgid, projectId, translation})
     .then(function () {
       console.log('File written')
-      mqttClient.publish('set', JSON.stringify({languageId, msgid, translation}))
+      mqttClient.publish('set', JSON.stringify({languageId, msgid, projectId, translation}))
       res.send('ok')
     })
     .catch(function (err) {

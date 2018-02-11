@@ -27,7 +27,7 @@ const store = new Vuex.Store({
       state.msgids = Object.keys(translations[Object.keys(translations)[0]])
       state.translations = translations
     },
-    setTranslation (state, {languageId, msgid, translation}) {
+    setTranslation (state, {languageId, msgid, projectId, translation}) {
       state.translations[languageId][msgid] = translation
     }
   },
@@ -60,10 +60,11 @@ const store = new Vuex.Store({
         dispatch('getTranslations')
       }
     },
-    setTranslation ({commit}, {languageId, msgid, translation}) {
+    setTranslation ({commit}, {languageId, msgid, projectId, translation}) {
       return httpApi.put('translate', {
         languageId,
         msgid,
+        projectId,
         translation
       })
     }
