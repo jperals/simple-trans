@@ -134,6 +134,7 @@
           .then(function (response) {
             this.unresolved -= 1
             this.saved = this.unresolved < 1
+            this.error = this.error && !this.saved
           }.bind(this))
           .catch(function (error) {
             this.unresolved -= 1
