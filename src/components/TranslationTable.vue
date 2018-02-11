@@ -2,7 +2,7 @@
   <table v-if="json">
     <thead>
       <tr>
-        <search-cell :language-id="'src'"></search-cell>
+        <search-cell language-id="src"></search-cell>
         <search-cell
           v-for="(translation, languageId) in json.translations"
           :language-id="languageId"
