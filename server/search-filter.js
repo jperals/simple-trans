@@ -5,7 +5,7 @@ function filterRow (row, filters) {
     const translation = row[languageId]
     match =
       match &&
-      (filter.length === 0 || translation.length && translation.toLowerCase().includes(filter.toLowerCase()))
+      (!filter || filter.length === 0 || translation && translation.length && translation.toLowerCase().includes(filter.toLowerCase()))
     if(!match) {
       break
     }
