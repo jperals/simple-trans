@@ -2,23 +2,23 @@
   <table v-if="json">
     <thead>
     <tr>
-      <td class="breadcrumbs"
+      <th class="breadcrumbs"
           :colspan="Object.keys(json.translations).length + 1">
         <router-link class="back-button" to="/">My Projects</router-link>
         /
         <span class="current">
           {{ $route.params.project }}
         </span>
-      </td>
+      </th>
     </tr>
     <tr class="languages">
-      <td>source</td>
-      <td class="language-id"
+      <th>source</th>
+      <th class="language-id"
           v-for="(translation, languageId) in json.translations"
           :key="languageId"
       >{{ languageId }}
 
-      </td>
+      </th>
     </tr>
     <tr>
       <search-cell language-id="src"></search-cell>
@@ -108,11 +108,13 @@
     top: 0;
     background: white;
     z-index: 10;
-    td {
+    text-align: left;
+    .breadcrumbs,
+    .languages th {
       padding: $grid-gutter*2 $grid-gutter;
     }
     .breadcrumbs .current,
-    tr.languages td.language-id {
+    tr.languages th.language-id {
       font-weight: bold;
     }
     .breadcrumbs a {
@@ -124,16 +126,12 @@
     padding: $grid-gutter;
   }
 
-  th {
-    text-align: left;
-  }
-
   tbody {
     &.loading {
       opacity: .5;
     }
     tr:hover {
-      background-color: rgb(235, 240, 240);
+      background-color: $bg-highlight-subtle;
       border-color: #ddd;
     }
     tr:hover td.msgid {
@@ -143,7 +141,8 @@
     }
   }
 
-  th, td {
+  th,
+  td {
     border: $border-light;
     vertical-align: top;
   }

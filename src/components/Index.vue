@@ -26,13 +26,16 @@
         padding: 0;
         li {
           border: $border-light;
+          & + li {
+            border-top: 0 none;
+          }
           a {
             display: block;
             padding: $grid-gutter $grid-gutter;
             text-decoration: none;
             transition: background-color .3s;
             &:hover {
-              background-color: $bg-highlight;
+              background-color: $bg-highlight-subtle;
               text-decoration: underline;
             }
           }
