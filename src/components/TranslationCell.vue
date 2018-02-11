@@ -99,8 +99,7 @@
       'cellHeight',
       'languageId',
       'msgId',
-      'translation',
-      'translationData'
+      'translation'
     ],
     data: function () {
       return {
@@ -119,7 +118,7 @@
         this.notifyHeight()
       },
       saveTranslation (languageId, msgid, event) {
-        if (event) {
+        if (event && event.target.value !== this.translation) {
           event.preventDefault()
           this.saved = false
           this.unresolved += 1

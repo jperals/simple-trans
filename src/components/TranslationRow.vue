@@ -11,8 +11,7 @@
                       :key="languageId"
                       :msg-id="msgId"
                       :language-id="languageId"
-                      :translation="translation[msgId]"
-                      :translation-data="translation">
+                      :translation="translation[msgId]">
     </translation-cell>
   </tr>
 </template>
