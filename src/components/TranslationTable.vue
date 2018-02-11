@@ -1,31 +1,37 @@
 <template>
   <table v-if="json">
     <thead>
-      <tr class="languages">
-        <td>Source</td>
-        <td
-          v-for="(translation, languageId) in json.translations"
-          :key="languageId"
-          >{{ languageId }}</td>
-      </tr>
-      <tr>
-        <search-cell language-id="src"></search-cell>
-        <search-cell
-          v-for="(translation, languageId) in json.translations"
-          :language-id="languageId"
-          :key="languageId"
-        ></search-cell>
-      </tr>
+    <tr class="project-name">
+      <td :colspan="Object.keys(json.translations).length + 1">
+        {{ $route.params.project }}
+      </td>
+    </tr>
+    <tr class="languages">
+      <td>Source</td>
+      <td
+        v-for="(translation, languageId) in json.translations"
+        :key="languageId"
+      >{{ languageId }}
+      </td>
+    </tr>
+    <tr>
+      <search-cell language-id="src"></search-cell>
+      <search-cell
+        v-for="(translation, languageId) in json.translations"
+        :language-id="languageId"
+        :key="languageId"
+      ></search-cell>
+    </tr>
     </thead>
     <tbody>
-      <translation-row
-        v-for="(msgid, index) in json.msgids"
-        v-if="index >= firstRow && index <= firstRow + nRows"
-        :key="msgid"
-        :msg-id="msgid"
-        :row-index="index"
-        :translations="json.translations">
-      </translation-row>
+    <translation-row
+      v-for="(msgid, index) in json.msgids"
+      v-if="index >= firstRow && index <= firstRow + nRows"
+      :key="msgid"
+      :msg-id="msgid"
+      :row-index="index"
+      :translations="json.translations">
+    </translation-row>
     </tbody>
   </table>
 </template>
@@ -41,6 +47,10 @@
         firstRow: 0,
         nRows: 50
       }
+    },
+    created: function () {
+      store.commit('setProject', this.$route.params.project)
+      store.dispatch('getTranslations')
     },
     components: {
       'search-cell': SearchCell,
@@ -89,11 +99,13 @@
     top: 0;
     background: white;
     z-index: 10;
-  }
-
-  tr.languages td {
-    font-weight: bold;
-    padding: $grid-gutter*2 $grid-gutter;
+    td {
+      padding: $grid-gutter*2 $grid-gutter;
+    }
+    tr.project-name td,
+    tr.languages td {
+      font-weight: bold;
+    }
   }
 
   td {

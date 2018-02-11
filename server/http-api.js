@@ -38,11 +38,12 @@ app.get('/languages', function (req, res) {
     })
 })
 
-app.get('/translations', function (req, res) {
+app.get('/translations/:projectId', function (req, res) {
   const languageId = req.query.languageId
+  const projectId = req.params.projectId
   const searchQuery = req.query.searchQuery
   if (languageId) {
-    const filePath = [l10nPath, languageId + '.json'].join('/')
+    const filePath = [l10nPath, projectId, languageId + '.json'].join('/')
     jsonfile.readFile(filePath, function (err, obj) {
       if (err) {
         console.error(err)
@@ -54,7 +55,7 @@ app.get('/translations', function (req, res) {
       }
     })
   } else {
-    getLanguages()
+    getLanguages(projectId)
       .then(function (languages) {
         let translations = {}
         const promises = []
@@ -63,7 +64,7 @@ app.get('/translations', function (req, res) {
           // Otherwise, the order of the keys seems to depend on the order in which the content from the the file system is retrieved, which is not reliable.
           translations[languageId] = {}
           promises.push(new Promise(function (resolve, reject) {
-            const filePath = [l10nPath, languageId + '.json'].join('/')
+            const filePath = [l10nPath, projectId, languageId + '.json'].join('/')
             jsonfile.readFile(filePath, function (err, obj) {
               if (err) {
                 reject(err)

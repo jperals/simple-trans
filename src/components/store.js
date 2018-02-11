@@ -9,11 +9,15 @@ const store = new Vuex.Store({
   state: {
     filters: {},
     msgids: {},
+    project: undefined,
     translations: {}
   },
   mutations: {
     setFilter (state, {languageId, expression}) {
       state.filters[languageId] = expression
+    },
+    setProject (state, projectId) {
+      state.project = projectId
     },
     setTranslations (state, {translations}) {
       state.msgids = Object.keys(translations[Object.keys(translations)[0]])
@@ -31,7 +35,7 @@ const store = new Vuex.Store({
       }
     },
     getTranslations ({commit, state}) {
-      let url = 'translations'
+      let url = 'translations/' + state.project
       if (state.filters && Object.keys(state.filters).length) {
         url += '?searchQuery=' + JSON.stringify(state.filters)
       }
@@ -69,7 +73,5 @@ mqttApi.client.on('message', function (topic, message) {
       break
   }
 })
-
-store.dispatch('getTranslations')
 
 export default store
