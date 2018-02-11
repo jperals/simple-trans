@@ -24,9 +24,11 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    setFilter ({commit, dispatch}, {languageId, expression}) {
-      commit('setFilter', {languageId, expression})
-      dispatch('getTranslations')
+    setFilter ({commit, dispatch, state}, {languageId, expression}) {
+      if (state.filters[languageId] !== expression) {
+        commit('setFilter', {languageId, expression})
+        dispatch('getTranslations')
+      }
     },
     getTranslations ({commit, state}) {
       let url = 'translations'
