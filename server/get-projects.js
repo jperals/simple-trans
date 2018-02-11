@@ -3,7 +3,6 @@ const l10nPath = require('./config').l10nPath
 
 function getProjects() {
   return new Promise(function (resolve, reject) {
-    console.log('getProjects')
     fs.readdir(l10nPath, function (err, files) {
       if (err) {
         reject(err)
