@@ -160,6 +160,9 @@
       background-color: $bg-highlight;
       position: relative;
     }
+    td:hover {
+      background-color: white;
+    }
   }
 
   th,
