@@ -9,7 +9,7 @@ const store = new Vuex.Store({
   state: {
     loading: false,
     filters: {},
-    msgids: {},
+    msgids: [],
     project: undefined,
     projects: [],
     translations: {}
@@ -25,9 +25,14 @@ const store = new Vuex.Store({
       state.projects = projects
     },
     setTranslations (state, {translations}) {
-      state.msgids = Object.keys(translations[Object.keys(translations)[0]])
       state.translations = translations
       state.loading = false
+      for (const language in translations) {
+        // Combine msgids
+        // Based on this: https://stackoverflow.com/a/27664971
+        state.msgids = [...new Set(state.msgids.concat(Object.keys(translations[language])))]
+      }
+      state.msgids = Object.keys(translations[Object.keys(translations)[0]])
     },
     setTranslation (state, {languageId, msgid, projectId, translation}) {
       state.translations[languageId][msgid] = translation
