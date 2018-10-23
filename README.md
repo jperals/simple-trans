@@ -1,8 +1,8 @@
 # simple-trans
 
-> Simple, JSON-based web platform to ease translation of software projects
+Simple, JSON-based web app to ease translation of software projects
 
-![Screenshot](static/simple-trans-screenshot.png)
+![Screenshot](static/img/simple-trans-screenshot.png)
 
 ## Why?
 
@@ -10,6 +10,10 @@
 - For a development process where quick iteration is important, an online approach as a single and unidirectional "source of truth" is much preferable to a file-based workflow.
 - All language translations are visible at a glance, which can be helpful for translators and can facilitate coherence across languages.
 - Simplicity.
+
+## How?
+
+Create project-specific directories inside `static/l10n` to host your JSON translation files. Inside the JSON files the keys correspond to the source strings and need to exist beforehand, but their corresponding values can be filled through the web app. See the `sample-project` directory as an example.
 
 ## Build Setup
 
